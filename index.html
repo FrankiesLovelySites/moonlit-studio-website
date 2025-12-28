@@ -7,15 +7,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --bg-dark: #0a0a0f;
-            --primary: #7289da;
-            --accent: #00d2ff;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --bg-dark: #050508;
+            --primary: #5865F2; /* Discord Blurpleish */
+            --accent: #00e5ff; /* Cyan Neon */
+            --accent-glow: rgba(0, 229, 255, 0.6);
+            --glass: rgba(20, 20, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
-            --text-dim: #a0a0b0;
+            --text-dim: #b8b8cc;
         }
 
         * {
@@ -26,14 +29,70 @@
             scroll-behavior: smooth;
         }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
         body {
             background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(114, 137, 218, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(0, 210, 255, 0.1) 0%, transparent 20%);
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Star Background */
+        .stars, .stars2, .stars3 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: transparent;
+        }
+        
+        /* Creating stars using box-shadows */
+        .stars::after {
+            content: " ";
+            position: absolute;
+            top: 2000px;
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            box-shadow: 124px 235px #fff, 1200px 532px #fff, 600px 400px #fff, 
+                        900px 120px #fff, 300px 900px #fff, 1500px 800px #fff,
+                        100px 600px #fff, 1700px 300px #fff;
+            animation: animStar 50s linear infinite;
+        }
+        
+        .stars2::after {
+            content: " ";
+            position: absolute;
+            top: 2000px;
+            width: 2px;
+            height: 2px;
+            background: transparent;
+            box-shadow: 400px 500px #fff, 1300px 200px #fff, 800px 100px #fff,
+                        100px 800px #fff, 1600px 500px #fff;
+            animation: animStar 100s linear infinite;
+        }
+
+        @keyframes animStar {
+            from { transform: translateY(-2000px); }
+            to { transform: translateY(0px); }
         }
 
         /* Navbar */
@@ -41,12 +100,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 5%;
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(10px);
+            padding: 20px 5%;
+            background: rgba(5, 5, 8, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
             border-bottom: 1px solid var(--glass-border);
             animation: fadeInDown 0.8s ease-out;
         }
@@ -54,31 +114,39 @@
         .logo-container {
             display: flex;
             align-items: center;
+            gap: 15px;
         }
 
         .logo-img-nav {
-            height: 50px;
+            height: 45px;
             width: auto;
-            margin-right: 15px;
+            filter: drop-shadow(0 0 5px var(--primary));
         }
 
         .logo-text {
-            font-size: 1.5rem;
-            font-weight: 900;
-            background: linear-gradient(to right, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
             text-transform: uppercase;
             letter-spacing: 2px;
+            position: relative;
         }
 
         .nav-links a {
             color: var(--text-dim);
             text-decoration: none;
-            margin-left: 30px;
+            margin-left: 35px;
             font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: 0.3s;
             position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent);
         }
 
         .nav-links a::after {
@@ -87,14 +155,11 @@
             width: 0;
             height: 2px;
             bottom: -5px;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: var(--accent);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--accent);
         }
 
         .nav-links a:hover::after {
@@ -110,83 +175,93 @@
 
         /* Hero Section */
         .hero {
-            min-height: 85vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding-top: 60px;
-            animation: fadeInUp 1s ease-out 0.2s backwards;
+            padding-top: 40px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(88, 101, 242, 0.15) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            filter: blur(50px);
         }
 
         .hero-logo {
-            width: 250px;
+            width: 280px;
             height: auto;
-            margin-bottom: 30px;
-            filter: drop-shadow(0 0 30px rgba(114, 137, 218, 0.5));
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 40px rgba(88, 101, 242, 0.4));
             animation: float 6s ease-in-out infinite;
         }
 
         .hero h1 {
-            font-size: 5rem;
-            line-height: 1.1;
+            font-size: 5.5rem;
+            line-height: 1;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #ffffff 0%, #b0c4de 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(114, 137, 218, 0.3));
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(88, 101, 242, 0.3);
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--accent);
+            position: relative;
         }
 
         .hero p {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--text-dim);
-            margin-bottom: 40px;
-            max-width: 600px;
+            margin-bottom: 50px;
+            max-width: 650px;
+            line-height: 1.6;
         }
 
         .cta-btn {
-            padding: 15px 40px;
+            padding: 18px 50px;
             background: var(--primary);
             color: white;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 20px rgba(114, 137, 218, 0.4);
-            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            box-shadow: 0 0 0 rgba(88, 101, 242, 0);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-        }
-
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(114, 137, 218, 0.6);
-            background: #8ea1e1;
-        }
-
-        .cta-btn:hover::before {
-            left: 100%;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 40px rgba(88, 101, 242, 0.6);
+            background: #4752c4;
+            border-color: var(--accent);
         }
 
         /* Section Styling */
         section {
-            padding: 100px 0;
+            padding: 120px 0;
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
         }
 
         section.visible {
@@ -196,10 +271,12 @@
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 60px;
-            font-weight: 700;
-            color: var(--text-main);
+            font-size: 3rem;
+            margin-bottom: 70px;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
             position: relative;
             display: inline-block;
             left: 50%;
@@ -209,85 +286,101 @@
         .section-title::after {
             content: '';
             display: block;
-            width: 60%;
-            height: 3px;
-            background: var(--accent);
-            margin: 15px auto 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 20px auto 0;
             border-radius: 2px;
+            box-shadow: 0 0 10px var(--accent);
         }
 
         /* Games / Status Section */
         .status-card {
             background: var(--glass);
             border: 1px solid var(--glass-border);
-            padding: 60px;
-            border-radius: 20px;
+            padding: 80px 40px;
+            border-radius: 30px;
             text-align: center;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: 0.4s;
         }
 
         .status-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
-        }
-
-        .status-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: scan 3s linear infinite;
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(88, 101, 242, 0.1);
         }
 
         .status-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            display: block;
+            font-size: 4rem;
+            margin-bottom: 25px;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px rgba(255, 200, 0, 0.4));
             animation: pulse 2s infinite;
+        }
+
+        .status-card h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #fff;
         }
 
         .status-text {
             font-size: 1.2rem;
             color: var(--text-dim);
+            line-height: 1.6;
         }
 
         /* Founders Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 40px;
             justify-content: center;
         }
 
         .card {
-            background: var(--glass);
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 24px;
+            padding: 50px 30px;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .card:hover::before {
+            transform: translateX(100%);
         }
 
         .card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px);
             border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(88, 101, 242, 0.2);
         }
 
         .avatar-container {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 25px;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 30px;
             position: relative;
         }
 
@@ -297,121 +390,137 @@
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid rgba(255,255,255,0.1);
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: 0.4s;
+            filter: grayscale(20%);
         }
 
         .card:hover .avatar {
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(114, 137, 218, 0.5);
+            border-color: var(--accent);
+            box-shadow: 0 0 25px var(--accent-glow);
+            filter: grayscale(0%);
+            transform: rotate(5deg);
         }
 
         .card h3 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 10px;
+            color: white;
+            font-weight: 700;
         }
 
         .card .role {
             color: var(--accent);
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             font-size: 0.9rem;
             letter-spacing: 2px;
+            background: rgba(0, 229, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid rgba(0, 229, 255, 0.2);
         }
 
         /* Footer */
         footer {
             border-top: 1px solid var(--glass-border);
             padding: 80px 0 40px;
-            background: rgba(0,0,0,0.2);
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
             margin-top: 50px;
             text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        footer.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .footer-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 25px;
+            margin-bottom: 50px;
             flex-wrap: wrap;
         }
 
         .social-link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 25px;
-            border-radius: 10px;
+            gap: 12px;
+            padding: 15px 30px;
+            border-radius: 12px;
             text-decoration: none;
             color: white;
             font-weight: 600;
-            transition: transform 0.2s, background-color 0.2s;
-        }
-
-        .social-link:hover {
-            transform: scale(1.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid transparent;
         }
 
         .btn-discord {
-            background-color: #5865F2;
+            background-color: rgba(88, 101, 242, 0.2);
+            border: 1px solid rgba(88, 101, 242, 0.5);
         }
-        .btn-discord:hover { background-color: #4752c4; }
+        .btn-discord:hover {
+            background-color: #5865F2;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+            transform: translateY(-3px);
+        }
 
         .btn-roblox {
-            background-color: #232323;
-            border: 1px solid #333;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .btn-roblox:hover { background-color: #333; }
+        .btn-roblox:hover {
+            background-color: #ffffff;
+            color: black;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .btn-staff {
+            background: linear-gradient(45deg, #ff0055, #ff5500);
+            position: relative;
+            z-index: 1;
+        }
+        .btn-staff:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 25px rgba(255, 85, 0, 0.4);
+            transform: translateY(-3px);
+        }
 
         .copyright {
             color: var(--text-dim);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            opacity: 0.6;
         }
 
         /* Animations */
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-20px); }
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes scan {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0% { transform: scale(1); opacity: 1; text-shadow: 0 0 0 rgba(255,200,0,0); }
+            50% { transform: scale(1.1); opacity: 0.8; text-shadow: 0 0 20px rgba(255,200,0,0.6); }
+            100% { transform: scale(1); opacity: 1; text-shadow: 0 0 0 rgba(255,200,0,0); }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 3rem; }
             .nav-links { display: none; }
-            .logo-img-nav { height: 40px; }
-            .logo-text { font-size: 1.2rem; }
+            .logo-img-nav { height: 35px; }
+            .logo-text { font-size: 1.1rem; }
+            .grid { grid-template-columns: 1fr; }
+            .container { padding: 0 15px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="stars"></div>
+    <div class="stars2"></div>
 
     <nav>
         <div class="logo-container">
@@ -429,9 +538,11 @@
         
         <section class="hero visible">
             <img src="moonlit_logo_transparent.png" alt="Moonlit Studio Logo" class="hero-logo">
-            <h1>Moonlit Studio<br>R⟐BLOX</h1>
-            <p>Brightining R⟐BLOX, today, tommorow, and into the future.</p>
-            <a href="https://discord.gg/W46M554E4S" class="cta-btn">Join the Discord</a>
+            <h1>Moonlit Studio<br><span>R⟐BLOX</span></h1>
+            <p>Brightening Roblox, today, tomorrow, and into the future.</p>
+            <a href="https://discord.gg/W46M554E4S" class="cta-btn">
+                <i class="fab fa-discord"></i> Join the Discord
+            </a>
         </section>
 
         <section id="games">
@@ -439,12 +550,12 @@
             <div class="status-card">
                 <span class="status-icon">🚧</span>
                 <h3>Development In Progress</h3>
-                <p class="status-text">We are currently cooking up something special. No playable games are available just yet.</p>
+                <p class="status-text">We are currently cooking up something special. High-quality gameplay takes time, but trust us—it will be worth the wait. No playable games are available just yet.</p>
             </div>
         </section>
 
         <section id="founders">
-            <h2 class="section-title">Ownership Team</h2>
+            <h2 class="section-title">Leadership Team</h2>
             <div class="grid">
                 
                 <div class="card">
@@ -452,7 +563,7 @@
                         <img src="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-98961EC80E5596731D24D09AF536EB14-Png/150/150/AvatarHeadshot/Webp/noFilter" alt="Lemon" class="avatar">
                     </div>
                     <h3>Lemon</h3>
-                    <p class="role">Chairman</p>
+                    <p class="role">Director</p>
                 </div>
 
                 <div class="card">
@@ -460,7 +571,7 @@
                         <img src="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-FAD11772429EC609BA5CD77DF5C67BA8-Png/150/150/AvatarHeadshot/Webp/noFilter" alt="Robert" class="avatar">
                     </div>
                     <h3>Robert</h3>
-                    <p class="role">Vice Chairman</p>
+                    <p class="role">Assistant Director</p>
                 </div>
 
             </div>
@@ -472,13 +583,13 @@
         <div class="container">
             <div class="footer-buttons">
                 <a href="https://discord.gg/W46M554E4S" class="social-link btn-discord" target="_blank">
-                    Join Discord Server
+                    <i class="fab fa-discord"></i> Join Discord Server
                 </a>
                 <a href="https://www.roblox.com/communities/165534807/Moonlit-Studio-Games#!/about" class="social-link btn-roblox" target="_blank">
-                    Visit Roblox Group
+                    <i class="fas fa-gamepad"></i> Visit Roblox Group
                 </a>
-                <a href="https://apply.moonlit-studios.com" class="social-link btn-discord" target="_blank">
-                    Apply For Staff
+                <a href="https://apply.moonlit-studios.com" class="social-link btn-staff" target="_blank">
+                    <i class="fas fa-clipboard-list"></i> Apply For Staff
                 </a>
             </div>
             <p class="copyright">&copy; 2025 Moonlit Studio Games. All rights reserved.</p>
@@ -503,9 +614,4 @@
     </script>
 
 </body>
-
 </html>
-
-
-
-
